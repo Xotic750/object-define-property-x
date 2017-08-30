@@ -1,6 +1,6 @@
 /**
  * @file Sham for Object.defineProperty
- * @version 2.1.0
+ * @version 2.1.1
  * @author Xotic750 <Xotic750@gmail.com>
  * @copyright  Xotic750
  * @license {@link <https://opensource.org/licenses/MIT> MIT}
@@ -150,7 +150,7 @@ if (Boolean($defineProperty) === false || definePropertyFallback) {
  *
  * var o = {}; // Creates a new object
  *
- * Object.defineProperty(o, 'a', {
+ * defineProperty(o, 'a', {
  *   value: 37,
  *   writable: true
  * });

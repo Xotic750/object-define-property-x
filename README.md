@@ -23,7 +23,7 @@
 ## object-define-property-x
 Sham for Object.defineProperty
 
-**Version**: 2.1.0  
+**Version**: 2.1.1  
 **Author**: Xotic750 <Xotic750@gmail.com>  
 **License**: [MIT](&lt;https://opensource.org/licenses/MIT&gt;)  
 **Copyright**: Xotic750  
@@ -48,7 +48,7 @@ var defineProperty = require('object-define-property-x');
 
 var o = {}; // Creates a new object
 
-Object.defineProperty(o, 'a', {
+defineProperty(o, 'a', {
   value: 37,
   writable: true
 });
