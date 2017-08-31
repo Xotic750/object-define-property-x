@@ -11,9 +11,7 @@
 
 var owns = require('has-own-property-x');
 var toPropertyKey = require('to-property-key-x');
-var assertIsObject = require('assert-is-object-x');
-var $defineProperty = Object.defineProperty;
-
+var nativeDefProp = typeof Object.defineProperty === 'function' && Object.defineProperty;
 var prototypeOfObject = Object.prototype;
 var definePropertyFallback;
 // If JS engine supports accessors creating shortcuts.
@@ -43,27 +41,42 @@ if (supportsAccessors) {
 // WebKit Bugs:
 //     https://bugs.webkit.org/show_bug.cgi?id=36423
 
-var doesDefinePropertyWork = function _doesDefinePropertyWork(object) {
+var isFalsey = function _isFalsy(value) {
+  return Boolean(value) === false;
+};
+
+var testWorksWith = function _testWorksWith(object, prop) {
   try {
-    $defineProperty(object, 'sentinel', {});
-    return 'sentinel' in object;
+    nativeDefProp(object, prop, {});
+    return prop in object;
   } catch (exception) {
     return false;
   }
 };
 
-// check whether defineProperty works if it's given. Otherwise,
-// shim partially.
-if ($defineProperty) {
-  // eslint-disable-next-line id-length
-  var definePropertyWorksOnObject = doesDefinePropertyWork({});
-  var definePropertyWorksOnDom = typeof document === 'undefined' || doesDefinePropertyWork(document.createElement('div'));
-  if (definePropertyWorksOnObject === false || definePropertyWorksOnDom === false) {
-    definePropertyFallback = $defineProperty;
+var $defineProperty;
+// check whether defineProperty works if it's given. Otherwise, shim partially.
+if (nativeDefProp) {
+  var worksWithDOM = typeof document === 'undefined' || testWorksWith(document.createElement('div'), 'sentinel');
+  if (worksWithDOM) {
+    var worksWithObject = testWorksWith({}, 'sentinel');
+    if (worksWithObject) {
+      var worksWithObjSym = require('has-symbol-support-x') && testWorksWith({}, Object(Symbol('')));
+      if (worksWithObjSym) {
+        $defineProperty = nativeDefProp;
+      } else {
+        $defineProperty = function defineProperty(object, property, descriptor) {
+          return nativeDefProp(object, toPropertyKey(property), descriptor);
+        };
+      }
+    } else {
+      definePropertyFallback = nativeDefProp;
+    }
   }
 }
 
-if (Boolean($defineProperty) === false || definePropertyFallback) {
+if (isFalsey($defineProperty) || definePropertyFallback) {
+  var assertIsObject = require('assert-is-object-x');
   $defineProperty = function defineProperty(object, property, descriptor) {
     assertIsObject(object);
     var propKey = toPropertyKey(property);
@@ -116,7 +129,7 @@ if (Boolean($defineProperty) === false || definePropertyFallback) {
     } else {
       var hasGetter = 'get' in descriptor;
       var hasSetter = 'set' in descriptor;
-      if (supportsAccessors === false && (hasGetter || hasSetter)) {
+      if (isFalsey(supportsAccessors) && (hasGetter || hasSetter)) {
         throw new TypeError('getters & setters can not be defined on this javascript engine');
       }
 
@@ -135,8 +148,8 @@ if (Boolean($defineProperty) === false || definePropertyFallback) {
 }
 
 /**
- * This method defines a new property directly on an object, or modifies an existing property on an object,
- * and returns the object.
+ * This method defines a new property directly on an object, or modifies an
+ * existing property on an object, and returns the object.
  *
  * @param {Object} object - The object on which to define the property.
  * @param {string} property - The name of the property to be defined or modified.

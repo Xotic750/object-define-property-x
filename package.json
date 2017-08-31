@@ -30,6 +30,7 @@
   "dependencies": {
     "assert-is-object-x": "^2.0.0",
     "has-own-property-x": "^3.0.0",
+    "has-symbol-support-x": "^1.4.0",
     "to-property-key-x": "^2.0.0"
   },
   "devDependencies": {

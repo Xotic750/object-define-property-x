@@ -30,8 +30,8 @@ Sham for Object.defineProperty
 <a name="exp_module_object-define-property-x--module.exports"></a>
 
 ### `module.exports` ⇒ <code>Object</code> ⏏
-This method defines a new property directly on an object, or modifies an existing property on an object,
-and returns the object.
+This method defines a new property directly on an object, or modifies an
+existing property on an object, and returns the object.
 
 **Kind**: Exported member  
 **Returns**: <code>Object</code> - The object that was passed to the function.  
