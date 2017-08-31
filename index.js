@@ -1,6 +1,6 @@
 /**
  * @file Sham for Object.defineProperty
- * @version 2.1.1
+ * @version 3.0.0
  * @author Xotic750 <Xotic750@gmail.com>
  * @copyright  Xotic750
  * @license {@link <https://opensource.org/licenses/MIT> MIT}
@@ -9,8 +9,9 @@
 
 'use strict';
 
-var isPrimitive = require('is-primitive');
 var owns = require('has-own-property-x');
+var toPropertyKey = require('to-property-key-x');
+var assertIsObject = require('assert-is-object-x');
 var $defineProperty = Object.defineProperty;
 
 var prototypeOfObject = Object.prototype;
@@ -58,28 +59,21 @@ if ($defineProperty) {
   var definePropertyWorksOnObject = doesDefinePropertyWork({});
   var definePropertyWorksOnDom = typeof document === 'undefined' || doesDefinePropertyWork(document.createElement('div'));
   if (definePropertyWorksOnObject === false || definePropertyWorksOnDom === false) {
-    definePropertyFallback = Object.defineProperty;
+    definePropertyFallback = $defineProperty;
   }
 }
 
 if (Boolean($defineProperty) === false || definePropertyFallback) {
-  var ERR_NON_OBJECT_DESCRIPTOR = 'Property description must be an object: ';
-  var ERR_NON_OBJECT_TARGET = 'Object.defineProperty called on non-object: ';
-  // eslint-disable-next-line id-length
-  var ERR_ACCESSORS_NOT_SUPPORTED = 'getters & setters can not be defined on this javascript engine';
-
   $defineProperty = function defineProperty(object, property, descriptor) {
-    if (isPrimitive(object)) {
-      throw new TypeError(ERR_NON_OBJECT_TARGET + object);
-    }
-    if (isPrimitive(descriptor)) {
-      throw new TypeError(ERR_NON_OBJECT_DESCRIPTOR + descriptor);
-    }
+    assertIsObject(object);
+    var propKey = toPropertyKey(property);
+    assertIsObject(descriptor);
+
     // make a valiant attempt to use the real defineProperty
     // for I8's DOM elements.
     if (definePropertyFallback) {
       try {
-        return definePropertyFallback.call(Object, object, property, descriptor);
+        return definePropertyFallback.call(Object, object, propKey, descriptor);
       } catch (exception) {
         // try the shim if the real one doesn't work
       }
@@ -101,7 +95,7 @@ if (Boolean($defineProperty) === false || definePropertyFallback) {
           );
       */
 
-      if (supportsAccessors && (lookupGetter.call(object, property) || lookupSetter.call(object, property))) {
+      if (supportsAccessors && (lookupGetter.call(object, propKey) || lookupSetter.call(object, propKey))) {
         // As accessors are supported only on engines implementing
         // `__proto__` we can safely override `__proto__` while defining
         // a property to make sure that we don't hit an inherited
@@ -111,28 +105,31 @@ if (Boolean($defineProperty) === false || definePropertyFallback) {
         object.__proto__ = prototypeOfObject;
         // Deleting a property anyway since getter / setter may be
         // defined on object itself.
-        delete object[property];
-        object[property] = descriptor.value;
+        delete object[propKey];
+        object[propKey] = descriptor.value;
         // Setting original `__proto__` back now.
         object.__proto__ = prototype;
         /* eslint-enable no-proto */
       } else {
-        object[property] = descriptor.value;
+        object[propKey] = descriptor.value;
       }
     } else {
       var hasGetter = 'get' in descriptor;
       var hasSetter = 'set' in descriptor;
       if (supportsAccessors === false && (hasGetter || hasSetter)) {
-        throw new TypeError(ERR_ACCESSORS_NOT_SUPPORTED);
+        throw new TypeError('getters & setters can not be defined on this javascript engine');
       }
+
       // If we got that far then getters and setters can be defined !!
       if (hasGetter) {
-        defineGetter.call(object, property, descriptor.get);
+        defineGetter.call(object, propKey, descriptor.get);
       }
+
       if (hasSetter) {
-        defineSetter.call(object, property, descriptor.set);
+        defineSetter.call(object, propKey, descriptor.set);
       }
     }
+
     return object;
   };
 }

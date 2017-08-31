@@ -21,6 +21,10 @@ if (typeof module === 'object' && module.exports) {
   defineProperty = returnExports;
 }
 
+var hasSymbols = typeof Symbol === 'function' && typeof Symbol('') === 'symbol';
+var itHasSymbols = hasSymbols ? it : xit;
+var documentElement = typeof document !== 'undefined' && document.documentElement;
+var itHasDocumentElement = documentElement ? it : xit;
 var has = Object.prototype.hasOwnProperty;
 
 describe('defineProperty', function () {
@@ -73,5 +77,19 @@ describe('defineProperty', function () {
     expect(function () {
       defineProperty({}, 'name', {});
     }).not.toThrow();
+  });
+
+  itHasSymbols('works with Symbols', function () {
+    var symbol = Symbol('');
+    var objSym = Object(symbol);
+    obj = {};
+    defineProperty(obj, objSym, { value: 1 });
+    expect(obj[symbol]).toBe(1);
+  });
+
+  itHasDocumentElement('works with DOM elements', function () {
+    var div = document.createElement('div');
+    defineProperty(div, 'blah', { value: 1 });
+    expect(div.blah).toBe(1);
   });
 });
