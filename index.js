@@ -1,6 +1,6 @@
 /**
  * @file Sham for Object.defineProperty
- * @version 3.0.0
+ * @version 3.0.1
  * @author Xotic750 <Xotic750@gmail.com>
  * @copyright  Xotic750
  * @license {@link <https://opensource.org/licenses/MIT> MIT}
@@ -11,6 +11,7 @@
 
 var owns = require('has-own-property-x');
 var toPropertyKey = require('to-property-key-x');
+var isFalsey = require('is-falsey-x');
 var nativeDefProp = typeof Object.defineProperty === 'function' && Object.defineProperty;
 var prototypeOfObject = Object.prototype;
 var definePropertyFallback;
@@ -40,10 +41,6 @@ if (supportsAccessors) {
 //     http://msdn.microsoft.com/en-us/library/dd229916.aspx
 // WebKit Bugs:
 //     https://bugs.webkit.org/show_bug.cgi?id=36423
-
-var isFalsey = function _isFalsy(value) {
-  return Boolean(value) === false;
-};
 
 var testWorksWith = function _testWorksWith(object, prop) {
   try {
