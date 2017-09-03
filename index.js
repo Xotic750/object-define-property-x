@@ -1,6 +1,6 @@
 /**
  * @file Sham for Object.defineProperty
- * @version 3.0.1
+ * @version 3.1.0
  * @author Xotic750 <Xotic750@gmail.com>
  * @copyright  Xotic750
  * @license {@link <https://opensource.org/licenses/MIT> MIT}
@@ -12,6 +12,7 @@
 var owns = require('has-own-property-x');
 var toPropertyKey = require('to-property-key-x');
 var isFalsey = require('is-falsey-x');
+var attempt = require('attempt-x');
 var nativeDefProp = typeof Object.defineProperty === 'function' && Object.defineProperty;
 var prototypeOfObject = Object.prototype;
 var definePropertyFallback;
@@ -43,12 +44,8 @@ if (supportsAccessors) {
 //     https://bugs.webkit.org/show_bug.cgi?id=36423
 
 var testWorksWith = function _testWorksWith(object, prop) {
-  try {
-    nativeDefProp(object, prop, {});
-    return prop in object;
-  } catch (exception) {
-    return false;
-  }
+  var testResult = attempt(nativeDefProp, object, prop, {});
+  return testResult.threw === false && prop in testResult.value;
 };
 
 var $defineProperty;
@@ -79,14 +76,13 @@ if (isFalsey($defineProperty) || definePropertyFallback) {
     var propKey = toPropertyKey(property);
     assertIsObject(descriptor);
 
-    // make a valiant attempt to use the real defineProperty
-    // for I8's DOM elements.
+    // make a valiant attempt to use the real defineProperty for I8's DOM elements.
     if (definePropertyFallback) {
-      try {
-        return definePropertyFallback.call(Object, object, propKey, descriptor);
-      } catch (exception) {
-        // try the shim if the real one doesn't work
+      var result = attempt.call(Object, definePropertyFallback, object, propKey, descriptor);
+      if (result.threw === false) {
+        return result.value;
       }
+      // try the shim if the real one doesn't work
     }
 
     // If it's a data property.
