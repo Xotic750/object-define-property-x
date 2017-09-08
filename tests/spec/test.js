@@ -21,11 +21,14 @@ if (typeof module === 'object' && module.exports) {
   defineProperty = returnExports;
 }
 
+var has = Object.prototype.hasOwnProperty;
+var supportsAccessors = has.call(Object.prototype, '__defineGetter__');
+var itHasAccessors = supportsAccessors ? it : xit;
+var itHasNoAccessors = supportsAccessors ? xit : it;
 var hasSymbols = typeof Symbol === 'function' && typeof Symbol('') === 'symbol';
 var itHasSymbols = hasSymbols ? it : xit;
-var documentElement = typeof document !== 'undefined' && document.documentElement;
-var itHasDocumentElement = documentElement ? it : xit;
-var has = Object.prototype.hasOwnProperty;
+var doc = typeof document !== 'undefined' && document;
+var itHasDoc = doc ? it : xit;
 
 describe('defineProperty', function () {
   var obj;
@@ -79,6 +82,74 @@ describe('defineProperty', function () {
     }).not.toThrow();
   });
 
+  it('should throw error if getter is not a function', function () {
+    expect(function () {
+      defineProperty({}, 'name', {
+        get: null
+      });
+    }).toThrow();
+  });
+
+  it('should throw error if getter and value defined', function () {
+    expect(function () {
+      defineProperty({}, 'name', {
+        get: function () {},
+        value: null
+      });
+    }).toThrow();
+  });
+
+  it('should throw error if getter and writeable is truthy', function () {
+    expect(function () {
+      defineProperty({}, 'name', {
+        get: function () {},
+        writable: true
+      });
+    }).toThrow();
+  });
+
+  it('should throw error if setter is not a function', function () {
+    expect(function () {
+      defineProperty({}, 'name', {
+        set: null
+      });
+    }).toThrow();
+  });
+
+  it('should throw error if setter and value defined', function () {
+    expect(function () {
+      defineProperty({}, 'name', {
+        set: function () {},
+        value: null
+      });
+    }).toThrow();
+  });
+
+  it('should throw error if setter and writeable is truthy', function () {
+    expect(function () {
+      defineProperty({}, 'name', {
+        set: function () {},
+        writable: true
+      });
+    }).toThrow();
+  });
+
+  itHasAccessors('should not throw error if has accessers', function () {
+    defineProperty({}, 'name', {
+      get: function () {},
+      set: function () {}
+    });
+  });
+
+  itHasNoAccessors('shoul throw error if no accessers available', function () {
+    expect(function () {
+      defineProperty({}, 'name', {
+        get: function () {},
+        set: function () {}
+      });
+    }).toThrow();
+  });
+
   itHasSymbols('works with Symbols', function () {
     var symbol = Symbol('');
     var objSym = Object(symbol);
@@ -87,7 +158,7 @@ describe('defineProperty', function () {
     expect(obj[symbol]).toBe(1);
   });
 
-  itHasDocumentElement('works with DOM elements', function () {
+  itHasDoc('works with DOM elements', function () {
     var div = document.createElement('div');
     defineProperty(div, 'blah', { value: 1 });
     expect(div.blah).toBe(1);
