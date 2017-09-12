@@ -9,6 +9,7 @@
 
 'use strict';
 
+var attempt = require('attempt-x');
 var isFalsey = require('is-falsey-x');
 var toObject = require('to-object-x');
 var toPropertyKey = require('to-property-key-x');
@@ -78,7 +79,6 @@ var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
 var $defineProperty;
 // check whether defineProperty works if it's given. Otherwise, shim partially.
 if (nativeDefProp) {
-  var attempt = require('attempt-x');
   var testWorksWith = function _testWorksWith(object) {
     var testResult = attempt(nativeDefProp, object, 'sentinel', {});
     return testResult.threw === false && testResult.value === object && 'sentinel' in object;
