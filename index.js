@@ -1,6 +1,6 @@
 /**
  * @file Sham for Object.defineProperty
- * @version 4.0.0
+ * @version 4.1.0
  * @author Xotic750 <Xotic750@gmail.com>
  * @copyright  Xotic750
  * @license {@link <https://opensource.org/licenses/MIT> MIT}
@@ -10,16 +10,17 @@
 'use strict';
 
 var isFalsey = require('is-falsey-x');
-var attempt = require('attempt-x');
 var toObject = require('to-object-x');
 var toPropertyKey = require('to-property-key-x');
 var has = require('has-own-property-x');
 var isFunction = require('is-function-x');
 var isUndefined = require('validate.io-undefined');
+var assertIsObject = require('assert-is-object-x');
 var nativeDefProp = typeof Object.defineProperty === 'function' && Object.defineProperty;
 var definePropertyFallback;
 
-var toPropertyDescriptor = function _toPropertyDescriptor(object) {
+var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
+  var object = toObject(desc);
   var descriptor = {};
   if (has(object, 'enumerable')) {
     descriptor.enumerable = Boolean(object.enumerable);
@@ -77,27 +78,23 @@ var toPropertyDescriptor = function _toPropertyDescriptor(object) {
 var $defineProperty;
 // check whether defineProperty works if it's given. Otherwise, shim partially.
 if (nativeDefProp) {
+  var attempt = require('attempt-x');
   var testWorksWith = function _testWorksWith(object) {
     var testResult = attempt(nativeDefProp, object, 'sentinel', {});
-    return testResult.threw === false && testResult === object && 'sentinel' in object;
+    return testResult.threw === false && testResult.value === object && 'sentinel' in object;
   };
 
   var doc = typeof document !== 'undefined' && document;
-  var worksWithDOM = isFalsey(doc) || testWorksWith(doc.createElement('div'));
-  if (worksWithDOM) {
-    var worksWithObject = testWorksWith({});
-    if (worksWithObject) {
-      $defineProperty = function defineProperty(object, property, descriptor) {
-        return nativeDefProp(object, toPropertyKey(property), toPropertyDescriptor(toObject(descriptor)));
-      };
-    } else {
-      definePropertyFallback = nativeDefProp;
-    }
+  if (testWorksWith({}) && (isFalsey(doc) || testWorksWith(doc.createElement('div')))) {
+    $defineProperty = function defineProperty(object, property, descriptor) {
+      return nativeDefProp(assertIsObject(object), toPropertyKey(property), toPropertyDescriptor(descriptor));
+    };
+  } else {
+    definePropertyFallback = nativeDefProp;
   }
 }
 
-if (isFalsey($defineProperty) || definePropertyFallback) {
-  var assertIsObject = require('assert-is-object-x');
+if (isFalsey(nativeDefProp) || definePropertyFallback) {
   var prototypeOfObject = Object.prototype;
 
   // If JS engine supports accessors creating shortcuts.
@@ -118,7 +115,7 @@ if (isFalsey($defineProperty) || definePropertyFallback) {
   $defineProperty = function defineProperty(object, property, descriptor) {
     assertIsObject(object);
     var propKey = toPropertyKey(property);
-    var propDesc = toPropertyDescriptor(toObject(descriptor));
+    var propDesc = toPropertyDescriptor(descriptor);
 
     // make a valiant attempt to use the real defineProperty for IE8's DOM elements.
     if (definePropertyFallback) {

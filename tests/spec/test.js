@@ -23,6 +23,7 @@ if (typeof module === 'object' && module.exports) {
 
 var has = Object.prototype.hasOwnProperty;
 var supportsAccessors = has.call(Object.prototype, '__defineGetter__');
+
 var itHasAccessors = supportsAccessors ? it : xit;
 var itHasNoAccessors = supportsAccessors ? xit : it;
 var hasSymbols = typeof Symbol === 'function' && typeof Symbol('') === 'symbol';
@@ -141,7 +142,7 @@ describe('defineProperty', function () {
     });
   });
 
-  itHasNoAccessors('shoul throw error if no accessers available', function () {
+  itHasNoAccessors('should throw error if no accessers available', function () {
     expect(function () {
       defineProperty({}, 'name', {
         get: function () {},
