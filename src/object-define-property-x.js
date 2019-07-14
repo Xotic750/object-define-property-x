@@ -1,28 +1,28 @@
 /**
- * @file Sham for Object.defineProperty
- * @version 4.1.0
- * @author Xotic750 <Xotic750@gmail.com>
- * @copyright  Xotic750
+ * @file Sham for Object.defineProperty.
+ * @version 4.1.0.
+ * @author Xotic750 <Xotic750@gmail.com>.
+ * @copyright  Xotic750.
  * @license {@link <https://opensource.org/licenses/MIT> MIT}
- * @module object-define-property-x
+ * @module Object-define-property-x.
  */
 
-'use strict';
+const attempt = require('attempt-x');
+const isFalsey = require('is-falsey-x');
+const toObject = require('to-object-x');
+const toPropertyKey = require('to-property-key-x');
+const has = require('has-own-property-x');
+const isFunction = require('is-function-x');
+const isUndefined = require('validate.io-undefined');
+const assertIsObject = require('assert-is-object-x');
 
-var attempt = require('attempt-x');
-var isFalsey = require('is-falsey-x');
-var toObject = require('to-object-x');
-var toPropertyKey = require('to-property-key-x');
-var has = require('has-own-property-x');
-var isFunction = require('is-function-x');
-var isUndefined = require('validate.io-undefined');
-var assertIsObject = require('assert-is-object-x');
-var nativeDefProp = typeof Object.defineProperty === 'function' && Object.defineProperty;
-var definePropertyFallback;
+const nativeDefProp = typeof Object.defineProperty === 'function' && Object.defineProperty;
+let definePropertyFallback;
 
-var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
-  var object = toObject(desc);
-  var descriptor = {};
+const toPropertyDescriptor = function _toPropertyDescriptor(desc) {
+  const object = toObject(desc);
+  const descriptor = {};
+
   if (has(object, 'enumerable')) {
     descriptor.enumerable = Boolean(object.enumerable);
   }
@@ -40,7 +40,8 @@ var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
   }
 
   if (has(object, 'get')) {
-    var getter = object.get;
+    const getter = object.get;
+
     if (isUndefined(getter) === false && isFunction(getter) === false) {
       throw new TypeError('getter must be a function');
     }
@@ -49,7 +50,8 @@ var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
   }
 
   if (has(object, 'set')) {
-    var setter = object.set;
+    const setter = object.set;
+
     if (isUndefined(setter) === false && isFunction(setter) === false) {
       throw new TypeError('setter must be a function');
     }
@@ -76,15 +78,18 @@ var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
 // WebKit Bugs:
 //     https://bugs.webkit.org/show_bug.cgi?id=36423
 
-var $defineProperty;
+let $defineProperty;
+
 // check whether defineProperty works if it's given. Otherwise, shim partially.
 if (nativeDefProp) {
-  var testWorksWith = function _testWorksWith(object) {
-    var testResult = attempt(nativeDefProp, object, 'sentinel', {});
+  const testWorksWith = function _testWorksWith(object) {
+    const testResult = attempt(nativeDefProp, object, 'sentinel', {});
+
     return testResult.threw === false && testResult.value === object && 'sentinel' in object;
   };
 
-  var doc = typeof document !== 'undefined' && document;
+  const doc = typeof document !== 'undefined' && document;
+
   if (testWorksWith({}) && (isFalsey(doc) || testWorksWith(doc.createElement('div')))) {
     $defineProperty = function defineProperty(object, property, descriptor) {
       return nativeDefProp(assertIsObject(object), toPropertyKey(property), toPropertyDescriptor(descriptor));
@@ -95,14 +100,15 @@ if (nativeDefProp) {
 }
 
 if (isFalsey(nativeDefProp) || definePropertyFallback) {
-  var prototypeOfObject = Object.prototype;
+  const prototypeOfObject = Object.prototype;
 
   // If JS engine supports accessors creating shortcuts.
-  var defineGetter;
-  var defineSetter;
-  var lookupGetter;
-  var lookupSetter;
-  var supportsAccessors = has(prototypeOfObject, '__defineGetter__');
+  let defineGetter;
+  let defineSetter;
+  let lookupGetter;
+  let lookupSetter;
+  const supportsAccessors = has(prototypeOfObject, '__defineGetter__');
+
   if (supportsAccessors) {
     /* eslint-disable no-underscore-dangle, no-restricted-properties */
     defineGetter = prototypeOfObject.__defineGetter__;
@@ -114,12 +120,13 @@ if (isFalsey(nativeDefProp) || definePropertyFallback) {
 
   $defineProperty = function defineProperty(object, property, descriptor) {
     assertIsObject(object);
-    var propKey = toPropertyKey(property);
-    var propDesc = toPropertyDescriptor(descriptor);
+    const propKey = toPropertyKey(property);
+    const propDesc = toPropertyDescriptor(descriptor);
 
     // make a valiant attempt to use the real defineProperty for IE8's DOM elements.
     if (definePropertyFallback) {
-      var result = attempt.call(Object, definePropertyFallback, object, propKey, propDesc);
+      const result = attempt.call(Object, definePropertyFallback, object, propKey, propDesc);
+
       if (result.threw === false) {
         return result.value;
       }
@@ -134,7 +141,7 @@ if (isFalsey(nativeDefProp) || definePropertyFallback) {
         // `__proto__` we can safely override `__proto__` while defining
         // a property to make sure that we don't hit an inherited accessor.
         /* eslint-disable no-proto */
-        var prototype = object.__proto__;
+        const prototype = object.__proto__;
         object.__proto__ = prototypeOfObject;
         // Deleting a property anyway since getter / setter may be defined on object itself.
         delete object[propKey];
@@ -168,12 +175,12 @@ if (isFalsey(nativeDefProp) || definePropertyFallback) {
  * This method defines a new property directly on an object, or modifies an
  * existing property on an object, and returns the object.
  *
- * @param {Object} object - The object on which to define the property.
+ * @param {object} object - The object on which to define the property.
  * @param {string} property - The name of the property to be defined or modified.
- * @param {Object} descriptor - The descriptor for the property being defined or modified.
- * @returns {Object} The object that was passed to the function.
+ * @param {object} descriptor - The descriptor for the property being defined or modified.
+ * @returns {object} The object that was passed to the function.
  * @example
- * var defineProperty = require('object-define-property-x');
+ * var defineProperty = require('object-define-property-x');.
  *
  * var o = {}; // Creates a new object
  *
