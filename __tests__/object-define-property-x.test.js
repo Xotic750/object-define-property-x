@@ -1,33 +1,11 @@
-let defineProperty;
-
-if (typeof module === 'object' && module.exports) {
-  require('es5-shim');
-  require('es5-shim/es5-sham');
-
-  if (typeof JSON === 'undefined') {
-    JSON = {};
-  }
-
-  require('json3').runInContext(null, JSON);
-  require('es6-shim');
-  const es7 = require('es7-shim');
-  Object.keys(es7).forEach(function(key) {
-    const obj = es7[key];
-
-    if (typeof obj.shim === 'function') {
-      obj.shim();
-    }
-  });
-  defineProperty = require('../../index.js');
-} else {
-  defineProperty = returnExports;
-}
+import defineProperty from '../src/object-define-property-x';
 
 const has = Object.prototype.hasOwnProperty;
 const supportsAccessors = has.call(Object.prototype, '__defineGetter__');
 
 const itHasAccessors = supportsAccessors ? it : xit;
 const itHasNoAccessors = supportsAccessors ? xit : it;
+/* eslint-disable-next-line compat/compat */
 const hasSymbols = typeof Symbol === 'function' && typeof Symbol('') === 'symbol';
 const itHasSymbols = hasSymbols ? it : xit;
 const doc = typeof document !== 'undefined' && document;
@@ -36,6 +14,7 @@ const itHasDoc = doc ? it : xit;
 describe('defineProperty', function() {
   let obj;
 
+  /* eslint-disable-next-line jest/no-hooks */
   beforeEach(function() {
     obj = {};
 
@@ -48,23 +27,27 @@ describe('defineProperty', function() {
   });
 
   it('should return the initial value', function() {
-    expect(has.call(obj, 'name')).toBeTruthy();
+    expect.assertions(2);
+    expect(has.call(obj, 'name')).toBe(true);
     expect(obj.name).toBe('Testing');
   });
 
   it('should be setable', function() {
+    expect.assertions(1);
     obj.name = 'Other';
     expect(obj.name).toBe('Other');
   });
 
   it('should return the parent initial value', function() {
+    expect.assertions(2);
     const child = Object.create(obj, {});
 
     expect(child.name).toBe('Testing');
-    expect(has.call(child, 'name')).toBeFalsy();
+    expect(has.call(child, 'name')).toBe(false);
   });
 
   it('should not override the parent value', function() {
+    expect.assertions(2);
     const child = Object.create(obj, {});
 
     defineProperty(child, 'name', {value: 'Other'});
@@ -74,86 +57,107 @@ describe('defineProperty', function() {
   });
 
   it('should throw error for non object', function() {
+    expect.assertions(1);
     expect(function() {
       defineProperty(42, 'name', {});
-    }).toThrow();
+    }).toThrowErrorMatchingSnapshot();
   });
 
   it('should not throw error for empty descriptor', function() {
-    expect(function() {
-      defineProperty({}, 'name', {});
-    }).not.toThrow();
+    expect.assertions(1);
+    defineProperty({}, 'name', {});
+    expect(true).toBe(true);
   });
 
   it('should throw error if getter is not a function', function() {
+    expect.assertions(1);
     expect(function() {
       defineProperty({}, 'name', {
         get: null,
       });
-    }).toThrow();
+    }).toThrowErrorMatchingSnapshot();
   });
 
   it('should throw error if getter and value defined', function() {
+    expect.assertions(1);
     expect(function() {
       defineProperty({}, 'name', {
+        /* eslint-disable-next-line lodash/prefer-noop */
         get() {},
         value: null,
       });
-    }).toThrow();
+    }).toThrowErrorMatchingSnapshot();
   });
 
   it('should throw error if getter and writeable is truthy', function() {
+    expect.assertions(1);
     expect(function() {
       defineProperty({}, 'name', {
+        /* eslint-disable-next-line lodash/prefer-noop */
         get() {},
         writable: true,
       });
-    }).toThrow();
+    }).toThrowErrorMatchingSnapshot();
   });
 
   it('should throw error if setter is not a function', function() {
+    expect.assertions(1);
     expect(function() {
       defineProperty({}, 'name', {
         set: null,
       });
-    }).toThrow();
+    }).toThrowErrorMatchingSnapshot();
   });
 
   it('should throw error if setter and value defined', function() {
+    expect.assertions(1);
     expect(function() {
       defineProperty({}, 'name', {
+        /* eslint-disable-next-line lodash/prefer-noop */
         set() {},
         value: null,
       });
-    }).toThrow();
+    }).toThrowErrorMatchingSnapshot();
   });
 
   it('should throw error if setter and writeable is truthy', function() {
+    expect.assertions(1);
     expect(function() {
       defineProperty({}, 'name', {
+        /* eslint-disable-next-line lodash/prefer-noop */
         set() {},
         writable: true,
       });
-    }).toThrow();
+    }).toThrowErrorMatchingSnapshot();
   });
 
   itHasAccessors('should not throw error if has accessers', function() {
+    expect.assertions(1);
     defineProperty({}, 'name', {
+      /* eslint-disable-next-line lodash/prefer-noop */
       get() {},
+      /* eslint-disable-next-line lodash/prefer-noop */
       set() {},
     });
+
+    expect(true).toBe(true);
   });
 
   itHasNoAccessors('should throw error if no accessers available', function() {
+    expect.assertions(1);
     expect(function() {
       defineProperty({}, 'name', {
+        /* eslint-disable-next-line lodash/prefer-noop */
         get() {},
+        /* eslint-disable-next-line lodash/prefer-noop */
         set() {},
       });
-    }).toThrow();
+    }).toThrowErrorMatchingSnapshot();
   });
 
   itHasSymbols('works with Symbols', function() {
+    expect.assertions(1);
+    /* eslint-disable-next-line compat/compat */
     const symbol = Symbol('');
     const objSym = Object(symbol);
     obj = {};
@@ -162,6 +166,7 @@ describe('defineProperty', function() {
   });
 
   itHasDoc('works with DOM elements', function() {
+    expect.assertions(1);
     const div = document.createElement('div');
     defineProperty(div, 'blah', {value: 1});
     expect(div.blah).toBe(1);

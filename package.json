@@ -1,6 +1,6 @@
 {
   "name": "object-define-property-x",
-  "version": "4.1.0",
+  "version": "5.0.0",
   "description": "Sham for Object.defineProperty",
   "homepage": "https://github.com/Xotic750/object-define-property-x",
   "author": {
@@ -56,8 +56,7 @@
     "is-falsey-x": "^2.0.6",
     "is-function-x": "^4.0.8",
     "to-object-x": "^2.0.1",
-    "to-property-key-x": "^3.0.2",
-    "validate.io-undefined": "^1.0.3"
+    "to-property-key-x": "^3.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.0",

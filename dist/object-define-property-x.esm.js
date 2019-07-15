@@ -5,13 +5,12 @@ import toPropertyKey from 'to-property-key-x';
 import has from 'has-own-property-x';
 import isFunction from 'is-function-x';
 import assertIsObject from 'assert-is-object-x';
+var nativeDefProp = typeof Object.defineProperty === 'function' && Object.defineProperty;
+var definePropertyFallback;
 
-const nativeDefProp = typeof Object.defineProperty === 'function' && Object.defineProperty;
-let definePropertyFallback;
-
-const toPropertyDescriptor = function _toPropertyDescriptor(desc) {
-  const object = toObject(desc);
-  const descriptor = {};
+var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
+  var object = toObject(desc);
+  var descriptor = {};
 
   if (has(object, 'enumerable')) {
     descriptor.enumerable = Boolean(object.enumerable);
@@ -30,7 +29,7 @@ const toPropertyDescriptor = function _toPropertyDescriptor(desc) {
   }
 
   if (has(object, 'get')) {
-    const getter = object.get;
+    var getter = object.get;
 
     if (typeof getter !== 'undefined' && isFunction(getter) === false) {
       throw new TypeError('getter must be a function');
@@ -40,7 +39,7 @@ const toPropertyDescriptor = function _toPropertyDescriptor(desc) {
   }
 
   if (has(object, 'set')) {
-    const setter = object.set;
+    var setter = object.set;
 
     if (typeof setter !== 'undefined' && isFunction(setter) === false) {
       throw new TypeError('setter must be a function');
@@ -54,11 +53,8 @@ const toPropertyDescriptor = function _toPropertyDescriptor(desc) {
   }
 
   return descriptor;
-};
-
-// ES5 15.2.3.6
+}; // ES5 15.2.3.6
 // http://es5.github.com/#x15.2.3.6
-
 // Patch for WebKit and IE8 standard mode
 // Designed by hax <hax.github.com>
 // related issue: https://github.com/es-shims/es5-shim/issues#issue/5
@@ -78,17 +74,17 @@ const toPropertyDescriptor = function _toPropertyDescriptor(desc) {
  * @returns {object} The object that was passed to the function.
  * });.
  */
-let $defineProperty;
 
-// check whether defineProperty works if it's given. Otherwise, shim partially.
+
+var $defineProperty; // check whether defineProperty works if it's given. Otherwise, shim partially.
+
 if (nativeDefProp) {
-  const testWorksWith = function _testWorksWith(object) {
-    const testResult = attempt(nativeDefProp, object, 'sentinel', {});
-
+  var testWorksWith = function _testWorksWith(object) {
+    var testResult = attempt(nativeDefProp, object, 'sentinel', {});
     return testResult.threw === false && testResult.value === object && 'sentinel' in object;
   };
 
-  const doc = typeof document !== 'undefined' && document;
+  var doc = typeof document !== 'undefined' && document;
 
   if (testWorksWith({}) && (isFalsey(doc) || testWorksWith(doc.createElement('div')))) {
     $defineProperty = function defineProperty(object, property, descriptor) {
@@ -100,57 +96,61 @@ if (nativeDefProp) {
 }
 
 if (isFalsey(nativeDefProp) || definePropertyFallback) {
-  const prototypeOfObject = Object.prototype;
+  var prototypeOfObject = Object.prototype; // If JS engine supports accessors creating shortcuts.
 
-  // If JS engine supports accessors creating shortcuts.
-  let defineGetter;
-  let defineSetter;
-  let lookupGetter;
-  let lookupSetter;
-  const supportsAccessors = has(prototypeOfObject, '__defineGetter__');
+  var defineGetter;
+  var defineSetter;
+  var lookupGetter;
+  var lookupSetter;
+  var supportsAccessors = has(prototypeOfObject, '__defineGetter__');
 
   if (supportsAccessors) {
     /* eslint-disable-next-line no-underscore-dangle,no-restricted-properties */
     defineGetter = prototypeOfObject.__defineGetter__;
     /* eslint-disable-next-line no-underscore-dangle,no-restricted-properties */
+
     defineSetter = prototypeOfObject.__defineSetter__;
     /* eslint-disable-next-line no-underscore-dangle */
+
     lookupGetter = prototypeOfObject.__lookupGetter__;
     /* eslint-disable-next-line no-underscore-dangle */
+
     lookupSetter = prototypeOfObject.__lookupSetter__;
   }
 
   $defineProperty = function defineProperty(object, property, descriptor) {
     assertIsObject(object);
-    const propKey = toPropertyKey(property);
-    const propDesc = toPropertyDescriptor(descriptor);
+    var propKey = toPropertyKey(property);
+    var propDesc = toPropertyDescriptor(descriptor); // make a valiant attempt to use the real defineProperty for IE8's DOM elements.
 
-    // make a valiant attempt to use the real defineProperty for IE8's DOM elements.
     if (definePropertyFallback) {
-      const result = attempt.call(Object, definePropertyFallback, object, propKey, propDesc);
+      var result = attempt.call(Object, definePropertyFallback, object, propKey, propDesc);
 
       if (result.threw === false) {
         return result.value;
-      }
-      // try the shim if the real one doesn't work
-    }
+      } // try the shim if the real one doesn't work
 
-    // If it's a data property.
+    } // If it's a data property.
+
+
     if (has(propDesc, 'value')) {
       // fail silently if 'writable', 'enumerable', or 'configurable' are requested but not supported
       if (supportsAccessors && (lookupGetter.call(object, propKey) || lookupSetter.call(object, propKey))) {
         // As accessors are supported only on engines implementing
         // `__proto__` we can safely override `__proto__` while defining
         // a property to make sure that we don't hit an inherited accessor.
+
         /* eslint-disable-next-line no-proto */
-        const prototype = object.__proto__;
+        var prototype = object.__proto__;
         /* eslint-disable-next-line no-proto */
-        object.__proto__ = prototypeOfObject;
-        // Deleting a property anyway since getter / setter may be defined on object itself.
+
+        object.__proto__ = prototypeOfObject; // Deleting a property anyway since getter / setter may be defined on object itself.
+
         delete object[propKey];
-        object[propKey] = propDesc.value;
-        // Setting original `__proto__` back now.
+        object[propKey] = propDesc.value; // Setting original `__proto__` back now.
+
         /* eslint-disable-next-line no-proto */
+
         object.__proto__ = prototype;
       } else {
         object[propKey] = propDesc.value;
@@ -158,9 +158,9 @@ if (isFalsey(nativeDefProp) || definePropertyFallback) {
     } else {
       if (supportsAccessors === false && (propDesc.get || propDesc.set)) {
         throw new TypeError('getters & setters can not be defined on this javascript engine');
-      }
+      } // If we got that far then getters and setters can be defined !!
 
-      // If we got that far then getters and setters can be defined !!
+
       if (propDesc.get) {
         defineGetter.call(object, propKey, propDesc.get);
       }
@@ -174,6 +174,7 @@ if (isFalsey(nativeDefProp) || definePropertyFallback) {
   };
 }
 
-const defProp = $defineProperty;
-
+var defProp = $defineProperty;
 export default defProp;
+
+//# sourceMappingURL=object-define-property-x.esm.js.map
