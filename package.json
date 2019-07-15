@@ -54,9 +54,9 @@
     "has-own-property-x": "^3.2.0",
     "has-symbol-support-x": "^2.0.4",
     "is-falsey-x": "^2.0.6",
-    "is-function-x": "^4.0.7",
+    "is-function-x": "^4.0.8",
     "to-object-x": "^2.0.1",
-    "to-property-key-x": "^3.0.1",
+    "to-property-key-x": "^3.0.2",
     "validate.io-undefined": "^1.0.3"
   },
   "devDependencies": {
