@@ -2,13 +2,13 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-07-15T15:50:28.168Z",
+  "date": "2019-07-16T11:02:49.733Z",
   "describe": "",
   "description": "Sham for Object.defineProperty",
   "file": "object-define-property-x.js",
-  "hash": "4cdb259093dfa3aefc85",
+  "hash": "2311679b7721758d3417",
   "license": "MIT",
-  "version": "5.0.0"
+  "version": "5.0.1"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -348,7 +348,7 @@ function attempt(fn) {
 }
 
 
-// CONCATENATED MODULE: ./node_modules/is-falsey-x/node_modules/to-boolean-x/dist/to-boolean-x.esm.js
+// CONCATENATED MODULE: ./node_modules/to-boolean-x/dist/to-boolean-x.esm.js
 /**
  * The abstract operation ToBoolean converts argument to a value of type Boolean.
  *
@@ -374,7 +374,7 @@ function isFalsey(value) {
 }
 
 
-// CONCATENATED MODULE: ./node_modules/to-object-x/node_modules/is-nil-x/dist/is-nil-x.esm.js
+// CONCATENATED MODULE: ./node_modules/is-nil-x/dist/is-nil-x.esm.js
 /**
  * Checks if `value` is `null` or `undefined`.
  *
@@ -387,7 +387,7 @@ function isNil(value) {
 }
 
 
-// CONCATENATED MODULE: ./node_modules/to-object-x/node_modules/require-object-coercible-x/dist/require-object-coercible-x.esm.js
+// CONCATENATED MODULE: ./node_modules/require-object-coercible-x/dist/require-object-coercible-x.esm.js
 
 /**
  * The abstract operation RequireObjectCoercible throws an error if argument
@@ -459,19 +459,7 @@ var is_primitive_default = /*#__PURE__*/__webpack_require__.n(is_primitive);
 var is_date_object = __webpack_require__(2);
 var is_date_object_default = /*#__PURE__*/__webpack_require__.n(is_date_object);
 
-// CONCATENATED MODULE: ./node_modules/is-function-x/node_modules/to-boolean-x/dist/to-boolean-x.esm.js
-/**
- * The abstract operation ToBoolean converts argument to a value of type Boolean.
- *
- * @param {*} [value] - The value to be converted.
- * @returns {boolean} 'true' if value is truthy; otherwise 'false'.
- */
-function to_boolean_x_esm_toBoolean(value) {
-  return !!value;
-}
-
-
-// CONCATENATED MODULE: ./node_modules/is-function-x/node_modules/to-string-tag-x/dist/to-string-tag-x.esm.js
+// CONCATENATED MODULE: ./node_modules/to-string-tag-x/dist/to-string-tag-x.esm.js
 var nativeObjectToString = {}.toString;
 /**
  * The `toStringTag` method returns "[object type]", where type is the
@@ -494,7 +482,7 @@ function toStringTag(value) {
 }
 
 
-// CONCATENATED MODULE: ./node_modules/is-function-x/node_modules/has-to-string-tag-x/dist/has-to-string-tag-x.esm.js
+// CONCATENATED MODULE: ./node_modules/has-to-string-tag-x/dist/has-to-string-tag-x.esm.js
 
 
 /**
@@ -509,40 +497,7 @@ function toStringTag(value) {
 is_symbol_default()(Symbol.toStringTag));
 
 
-// CONCATENATED MODULE: ./node_modules/is-function-x/node_modules/is-nil-x/dist/is-nil-x.esm.js
-/**
- * Checks if `value` is `null` or `undefined`.
- *
- * @param {*} [value] - The value to check.
- * @returns {boolean} Returns `true` if `value` is nullish, else `false`.
- */
-function is_nil_x_esm_isNil(value) {
-  /* eslint-disable-next-line lodash/prefer-is-nil */
-  return value === null || typeof value === 'undefined';
-}
-
-
-// CONCATENATED MODULE: ./node_modules/is-function-x/node_modules/require-object-coercible-x/dist/require-object-coercible-x.esm.js
-
-/**
- * The abstract operation RequireObjectCoercible throws an error if argument
- * is a value that cannot be converted to an Object using ToObject.
- *
- * @param {*} [value] - The `value` to check.
- * @throws {TypeError} If `value` is a `null` or `undefined`.
- * @returns {string} The `value`.
- */
-
-function require_object_coercible_x_esm_requireObjectCoercible(value) {
-  if (is_nil_x_esm_isNil(value)) {
-    throw new TypeError("Cannot call method on ".concat(value));
-  }
-
-  return value;
-}
-
-
-// CONCATENATED MODULE: ./node_modules/is-function-x/node_modules/to-string-x/dist/to-string-x.esm.js
+// CONCATENATED MODULE: ./node_modules/to-string-x/dist/to-string-x.esm.js
 
 var ERROR_MESSAGE = 'Cannot convert a Symbol value to a string';
 var castString = ERROR_MESSAGE.constructor;
@@ -563,7 +518,7 @@ function ToString(value) {
 }
 
 
-// CONCATENATED MODULE: ./node_modules/is-function-x/node_modules/require-coercible-to-string-x/dist/require-coercible-to-string-x.esm.js
+// CONCATENATED MODULE: ./node_modules/require-coercible-to-string-x/dist/require-coercible-to-string-x.esm.js
 
 
 /**
@@ -575,11 +530,11 @@ function ToString(value) {
  */
 
 function requireCoercibleToString(value) {
-  return ToString(require_object_coercible_x_esm_requireObjectCoercible(value));
+  return ToString(requireObjectCoercible(value));
 }
 
 
-// CONCATENATED MODULE: ./node_modules/is-function-x/node_modules/white-space-x/dist/white-space-x.esm.js
+// CONCATENATED MODULE: ./node_modules/white-space-x/dist/white-space-x.esm.js
 /**
  * A record of a white space character.
  *
@@ -892,7 +847,7 @@ var string2018 = stringES2018;
 var string2016 = stringES2016;
 
 
-// CONCATENATED MODULE: ./node_modules/is-function-x/node_modules/trim-left-x/dist/trim-left-x.esm.js
+// CONCATENATED MODULE: ./node_modules/trim-left-x/dist/trim-left-x.esm.js
 
 
 var EMPTY_STRING = '';
@@ -924,7 +879,7 @@ function trimLeft2018(string) {
 }
 
 
-// CONCATENATED MODULE: ./node_modules/is-function-x/node_modules/trim-right-x/dist/trim-right-x.esm.js
+// CONCATENATED MODULE: ./node_modules/trim-right-x/dist/trim-right-x.esm.js
 
 
 var trim_right_x_esm_EMPTY_STRING = '';
@@ -956,7 +911,7 @@ function trimRight2018(string) {
 }
 
 
-// CONCATENATED MODULE: ./node_modules/is-function-x/node_modules/trim-x/dist/trim-x.esm.js
+// CONCATENATED MODULE: ./node_modules/trim-x/dist/trim-x.esm.js
 
 
 /**
@@ -985,7 +940,7 @@ function trim2018(string) {
 }
 
 
-// CONCATENATED MODULE: ./node_modules/is-function-x/node_modules/normalize-space-x/dist/normalize-space-x.esm.js
+// CONCATENATED MODULE: ./node_modules/normalize-space-x/dist/normalize-space-x.esm.js
 
 
 var SPACE = ' ';
@@ -1020,7 +975,7 @@ function normalizeSpace2018(string) {
 }
 
 
-// CONCATENATED MODULE: ./node_modules/is-function-x/node_modules/replace-comments-x/dist/replace-comments-x.esm.js
+// CONCATENATED MODULE: ./node_modules/replace-comments-x/dist/replace-comments-x.esm.js
 
 
 var replace_comments_x_esm_EMPTY_STRING = '';
@@ -1110,7 +1065,7 @@ function isFunction(value, allowClass) {
   }
 
   if (has_to_string_tag_x_esm) {
-    return tryFuncToString(value, to_boolean_x_esm_toBoolean(allowClass));
+    return tryFuncToString(value, toBoolean(allowClass));
   }
 
   if (hasNativeClass && isFalsey(allowClass) && isES6ClassFn(value)) {
@@ -1122,40 +1077,7 @@ function isFunction(value, allowClass) {
 }
 
 
-// CONCATENATED MODULE: ./node_modules/to-property-key-x/node_modules/is-nil-x/dist/is-nil-x.esm.js
-/**
- * Checks if `value` is `null` or `undefined`.
- *
- * @param {*} [value] - The value to check.
- * @returns {boolean} Returns `true` if `value` is nullish, else `false`.
- */
-function dist_is_nil_x_esm_isNil(value) {
-  /* eslint-disable-next-line lodash/prefer-is-nil */
-  return value === null || typeof value === 'undefined';
-}
-
-
-// CONCATENATED MODULE: ./node_modules/to-property-key-x/node_modules/require-object-coercible-x/dist/require-object-coercible-x.esm.js
-
-/**
- * The abstract operation RequireObjectCoercible throws an error if argument
- * is a value that cannot be converted to an Object using ToObject.
- *
- * @param {*} [value] - The `value` to check.
- * @throws {TypeError} If `value` is a `null` or `undefined`.
- * @returns {string} The `value`.
- */
-
-function dist_require_object_coercible_x_esm_requireObjectCoercible(value) {
-  if (dist_is_nil_x_esm_isNil(value)) {
-    throw new TypeError("Cannot call method on ".concat(value));
-  }
-
-  return value;
-}
-
-
-// CONCATENATED MODULE: ./node_modules/to-property-key-x/node_modules/to-primitive-x/dist/to-primitive-x.esm.js
+// CONCATENATED MODULE: ./node_modules/to-primitive-x/dist/to-primitive-x.esm.js
 
 
 
@@ -1193,7 +1115,7 @@ var orderLength = 2;
  */
 
 var ordinaryToPrimitive = function _ordinaryToPrimitive(ordinary, hint) {
-  dist_require_object_coercible_x_esm_requireObjectCoercible(ordinary);
+  requireObjectCoercible(ordinary);
 
   if (typeof hint !== 'string' || hint !== NUMBER && hint !== STRING) {
     throw new TypeError('hint must be "string" or "number"');
@@ -1227,7 +1149,7 @@ var ordinaryToPrimitive = function _ordinaryToPrimitive(ordinary, hint) {
 var getMethod = function _getMethod(object, property) {
   var func = object[property];
 
-  if (dist_is_nil_x_esm_isNil(func) === false) {
+  if (isNil(func) === false) {
     if (isFunction(func) === false) {
       throw new TypeError("".concat(func, " returned for property ").concat(property, " of object ").concat(object, " is not a function"));
     }
@@ -1320,27 +1242,6 @@ function toPrimitive(input, preferredType) {
 }
 
 
-// CONCATENATED MODULE: ./node_modules/to-property-key-x/node_modules/to-string-x/dist/to-string-x.esm.js
-
-var to_string_x_esm_ERROR_MESSAGE = 'Cannot convert a Symbol value to a string';
-var to_string_x_esm_castString = to_string_x_esm_ERROR_MESSAGE.constructor;
-/**
- * The abstract operation ToString converts argument to a value of type String.
- *
- * @param {*} [value] - The value to convert to a string.
- * @throws {TypeError} If `value` is a Symbol.
- * @returns {string} The converted value.
- */
-
-function to_string_x_esm_ToString(value) {
-  if (is_symbol_default()(value)) {
-    throw new TypeError(to_string_x_esm_ERROR_MESSAGE);
-  }
-
-  return to_string_x_esm_castString(value);
-}
-
-
 // CONCATENATED MODULE: ./node_modules/to-property-key-x/dist/to-property-key-x.esm.js
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -1357,7 +1258,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 function toPropertyKey(argument) {
   var key = toPrimitive(argument, String);
-  return has_symbol_support_x_esm && _typeof(key) === 'symbol' ? key : to_string_x_esm_ToString(key);
+  return has_symbol_support_x_esm && _typeof(key) === 'symbol' ? key : ToString(key);
 }
 
 

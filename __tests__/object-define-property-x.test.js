@@ -5,7 +5,7 @@ const supportsAccessors = has.call(Object.prototype, '__defineGetter__');
 
 const itHasAccessors = supportsAccessors ? it : xit;
 const itHasNoAccessors = supportsAccessors ? xit : it;
-/* eslint-disable-next-line compat/compat */
+
 const hasSymbols = typeof Symbol === 'function' && typeof Symbol('') === 'symbol';
 const itHasSymbols = hasSymbols ? it : xit;
 const doc = typeof document !== 'undefined' && document;
@@ -14,7 +14,6 @@ const itHasDoc = doc ? it : xit;
 describe('defineProperty', function() {
   let obj;
 
-  /* eslint-disable-next-line jest/no-hooks */
   beforeEach(function() {
     obj = {};
 
@@ -82,7 +81,6 @@ describe('defineProperty', function() {
     expect.assertions(1);
     expect(function() {
       defineProperty({}, 'name', {
-        /* eslint-disable-next-line lodash/prefer-noop */
         get() {},
         value: null,
       });
@@ -93,7 +91,6 @@ describe('defineProperty', function() {
     expect.assertions(1);
     expect(function() {
       defineProperty({}, 'name', {
-        /* eslint-disable-next-line lodash/prefer-noop */
         get() {},
         writable: true,
       });
@@ -113,7 +110,6 @@ describe('defineProperty', function() {
     expect.assertions(1);
     expect(function() {
       defineProperty({}, 'name', {
-        /* eslint-disable-next-line lodash/prefer-noop */
         set() {},
         value: null,
       });
@@ -124,7 +120,6 @@ describe('defineProperty', function() {
     expect.assertions(1);
     expect(function() {
       defineProperty({}, 'name', {
-        /* eslint-disable-next-line lodash/prefer-noop */
         set() {},
         writable: true,
       });
@@ -134,9 +129,8 @@ describe('defineProperty', function() {
   itHasAccessors('should not throw error if has accessers', function() {
     expect.assertions(1);
     defineProperty({}, 'name', {
-      /* eslint-disable-next-line lodash/prefer-noop */
       get() {},
-      /* eslint-disable-next-line lodash/prefer-noop */
+
       set() {},
     });
 
@@ -147,9 +141,8 @@ describe('defineProperty', function() {
     expect.assertions(1);
     expect(function() {
       defineProperty({}, 'name', {
-        /* eslint-disable-next-line lodash/prefer-noop */
         get() {},
-        /* eslint-disable-next-line lodash/prefer-noop */
+
         set() {},
       });
     }).toThrowErrorMatchingSnapshot();
@@ -157,7 +150,7 @@ describe('defineProperty', function() {
 
   itHasSymbols('works with Symbols', function() {
     expect.assertions(1);
-    /* eslint-disable-next-line compat/compat */
+
     const symbol = Symbol('');
     const objSym = Object(symbol);
     obj = {};
