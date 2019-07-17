@@ -1,11 +1,12 @@
 import attempt from 'attempt-x';
-import isFalsey from 'is-falsey-x';
 import toObject from 'to-object-x';
 import toPropertyKey from 'to-property-key-x';
 import has from 'has-own-property-x';
 import isFunction from 'is-function-x';
 import assertIsObject from 'assert-is-object-x';
 
+/** @type {BooleanConstructor} */
+const castBoolean = true.constructor;
 const nativeDefProp = typeof Object.defineProperty === 'function' && Object.defineProperty;
 let definePropertyFallback;
 
@@ -90,7 +91,7 @@ if (nativeDefProp) {
 
   const doc = typeof document !== 'undefined' && document;
 
-  if (testWorksWith({}) && (isFalsey(doc) || testWorksWith(doc.createElement('div')))) {
+  if (testWorksWith({}) && (castBoolean(doc) === false || testWorksWith(doc.createElement('div')))) {
     $defineProperty = function defineProperty(object, property, descriptor) {
       return nativeDefProp(assertIsObject(object), toPropertyKey(property), toPropertyDescriptor(descriptor));
     };
@@ -99,7 +100,7 @@ if (nativeDefProp) {
   }
 }
 
-if (isFalsey(nativeDefProp) || definePropertyFallback) {
+if (castBoolean(nativeDefProp) === false || definePropertyFallback) {
   const prototypeOfObject = Object.prototype;
 
   // If JS engine supports accessors creating shortcuts.

@@ -2,13 +2,13 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-07-17T17:52:37.998Z",
+  "date": "2019-07-17T18:58:34.330Z",
   "describe": "",
   "description": "Sham for Object.defineProperty",
   "file": "object-define-property-x.js",
-  "hash": "b6f29c46988dbd2242b7",
+  "hash": "185459b379c4f1341e60",
   "license": "MIT",
-  "version": "5.0.4"
+  "version": "5.0.5"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -350,36 +350,6 @@ var attempt = function attempt(fn) {
 /* harmony default export */ var attempt_x_esm = (attempt);
 
 
-// CONCATENATED MODULE: ./node_modules/to-boolean-x/dist/to-boolean-x.esm.js
-/**
- * The abstract operation ToBoolean converts argument to a value of type Boolean.
- *
- * @param {*} [value] - The value to be converted.
- * @returns {boolean} 'true' if value is truthy; otherwise 'false'.
- */
-var toBoolean = function toBoolean(value) {
-  return !!value;
-};
-
-/* harmony default export */ var to_boolean_x_esm = (toBoolean);
-
-
-// CONCATENATED MODULE: ./node_modules/is-falsey-x/dist/is-falsey-x.esm.js
-
-/**
- * This method tests if a given value is falsey.
- *
- * @param {*} [value] - The value to test.
- * @returns {boolean} `true` if the value is falsey: otherwise `false`.
- */
-
-var is_falsey_x_esm_isFalsey = function isFalsey(value) {
-  return !to_boolean_x_esm(value);
-};
-
-/* harmony default export */ var is_falsey_x_esm = (is_falsey_x_esm_isFalsey);
-
-
 // CONCATENATED MODULE: ./node_modules/is-nil-x/dist/is-nil-x.esm.js
 /**
  * Checks if `value` is `null` or `undefined`.
@@ -470,6 +440,20 @@ var is_primitive_default = /*#__PURE__*/__webpack_require__.n(is_primitive);
 // EXTERNAL MODULE: ./node_modules/is-date-object/index.js
 var is_date_object = __webpack_require__(2);
 var is_date_object_default = /*#__PURE__*/__webpack_require__.n(is_date_object);
+
+// CONCATENATED MODULE: ./node_modules/to-boolean-x/dist/to-boolean-x.esm.js
+/**
+ * The abstract operation ToBoolean converts argument to a value of type Boolean.
+ *
+ * @param {*} [value] - The value to be converted.
+ * @returns {boolean} 'true' if value is truthy; otherwise 'false'.
+ */
+var toBoolean = function toBoolean(value) {
+  return !!value;
+};
+
+/* harmony default export */ var to_boolean_x_esm = (toBoolean);
+
 
 // CONCATENATED MODULE: ./node_modules/to-string-tag-x/dist/to-string-tag-x.esm.js
 var nativeObjectToString = {}.toString;
@@ -1376,7 +1360,9 @@ var assert_is_object_x_esm_assertIsObject = function assertIsObject(value) {
 
 
 
+/** @type {BooleanConstructor} */
 
+var object_define_property_x_esm_castBoolean = true.constructor;
 var nativeDefProp = typeof Object.defineProperty === 'function' && Object.defineProperty;
 var definePropertyFallback;
 
@@ -1458,7 +1444,7 @@ if (nativeDefProp) {
 
   var doc = typeof document !== 'undefined' && document;
 
-  if (testWorksWith({}) && (is_falsey_x_esm(doc) || testWorksWith(doc.createElement('div')))) {
+  if (testWorksWith({}) && (object_define_property_x_esm_castBoolean(doc) === false || testWorksWith(doc.createElement('div')))) {
     $defineProperty = function defineProperty(object, property, descriptor) {
       return nativeDefProp(assert_is_object_x_esm(object), to_property_key_x_esm(property), toPropertyDescriptor(descriptor));
     };
@@ -1467,7 +1453,7 @@ if (nativeDefProp) {
   }
 }
 
-if (is_falsey_x_esm(nativeDefProp) || definePropertyFallback) {
+if (object_define_property_x_esm_castBoolean(nativeDefProp) === false || definePropertyFallback) {
   var prototypeOfObject = Object.prototype; // If JS engine supports accessors creating shortcuts.
 
   var defineGetter;
