@@ -15,11 +15,11 @@ const toPropertyDescriptor = function _toPropertyDescriptor(desc) {
   const descriptor = {};
 
   if (has(object, 'enumerable')) {
-    descriptor.enumerable = Boolean(object.enumerable);
+    descriptor.enumerable = castBoolean(object.enumerable);
   }
 
   if (has(object, 'configurable')) {
-    descriptor.configurable = Boolean(object.configurable);
+    descriptor.configurable = castBoolean(object.configurable);
   }
 
   if (has(object, 'value')) {
@@ -27,7 +27,7 @@ const toPropertyDescriptor = function _toPropertyDescriptor(desc) {
   }
 
   if (has(object, 'writable')) {
-    descriptor.writable = Boolean(object.writable);
+    descriptor.writable = castBoolean(object.writable);
   }
 
   if (has(object, 'get')) {
