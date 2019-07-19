@@ -2,13 +2,13 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-07-18T18:57:49.921Z",
+  "date": "2019-07-19T22:06:34.058Z",
   "describe": "",
   "description": "Sham for Object.defineProperty",
   "file": "object-define-property-x.js",
-  "hash": "e8ec5c7136f6be7b26ad",
+  "hash": "32cfabb9803c1bcef744",
   "license": "MIT",
-  "version": "5.0.7"
+  "version": "5.0.8"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -1292,7 +1292,7 @@ var hop = {}.hasOwnProperty;
  *
  * @param {!object} object - The object to test.
  * @throws {TypeError} If object is null or undefined.
- * @param {string|Symbol} property - The name or Symbol of the property to test.
+ * @param {string|number|Symbol} property - The name or Symbol of the property to test.
  * @returns {boolean} `true` if the property is set on `object`, else `false`.
  */
 
