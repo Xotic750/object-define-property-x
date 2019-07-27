@@ -4,9 +4,9 @@ import toPropertyKey from 'to-property-key-x';
 import has from 'has-own-property-x';
 import isFunction from 'is-function-x';
 import assertIsObject from 'assert-is-object-x';
+import toBoolean from 'to-boolean-x';
 
 const ObjectCtr = {}.constructor;
-const castBoolean = true.constructor;
 const nd = ObjectCtr.defineProperty;
 const nativeDefProp = typeof nd === 'function' && nd;
 let definePropertyFallback;
@@ -16,11 +16,11 @@ const toPropertyDescriptor = function _toPropertyDescriptor(desc) {
   const descriptor = {};
 
   if (has(object, 'enumerable')) {
-    descriptor.enumerable = castBoolean(object.enumerable);
+    descriptor.enumerable = toBoolean(object.enumerable);
   }
 
   if (has(object, 'configurable')) {
-    descriptor.configurable = castBoolean(object.configurable);
+    descriptor.configurable = toBoolean(object.configurable);
   }
 
   if (has(object, 'value')) {
@@ -28,7 +28,7 @@ const toPropertyDescriptor = function _toPropertyDescriptor(desc) {
   }
 
   if (has(object, 'writable')) {
-    descriptor.writable = castBoolean(object.writable);
+    descriptor.writable = toBoolean(object.writable);
   }
 
   if (has(object, 'get')) {
@@ -92,7 +92,7 @@ if (nativeDefProp) {
 
   const doc = typeof document !== 'undefined' && document;
 
-  if (testWorksWith({}) && (castBoolean(doc) === false || testWorksWith(doc.createElement('div')))) {
+  if (testWorksWith({}) && (toBoolean(doc) === false || testWorksWith(doc.createElement('div')))) {
     $defineProperty = function defineProperty(object, property, descriptor) {
       return nativeDefProp(assertIsObject(object), toPropertyKey(property), toPropertyDescriptor(descriptor));
     };
@@ -101,7 +101,7 @@ if (nativeDefProp) {
   }
 }
 
-if (castBoolean(nativeDefProp) === false || definePropertyFallback) {
+if (toBoolean(nativeDefProp) === false || definePropertyFallback) {
   const prototypeOfObject = ObjectCtr.prototype;
   // If JS engine supports accessors creating shortcuts.
   const supportsAccessors = has(prototypeOfObject, '__defineGetter__');

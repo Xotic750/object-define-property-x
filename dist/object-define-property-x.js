@@ -2,11 +2,11 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-07-27T14:35:12.270Z",
+  "date": "2019-07-27T19:03:36.531Z",
   "describe": "",
   "description": "Sham for Object.defineProperty",
   "file": "object-define-property-x.js",
-  "hash": "7c257aac049eb59db650",
+  "hash": "e808397557d7a7dec39d",
   "license": "MIT",
   "version": "5.0.16"
 }
@@ -1310,8 +1310,8 @@ var assert_is_object_x_esm_assertIsObject = function assertIsObject(value) {
 
 
 
+
 var ObjectCtr = {}.constructor;
-var object_define_property_x_esm_castBoolean = true.constructor;
 var nd = ObjectCtr.defineProperty;
 var nativeDefProp = typeof nd === 'function' && nd;
 var definePropertyFallback;
@@ -1321,11 +1321,11 @@ var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
   var descriptor = {};
 
   if (has_own_property_x_esm(object, 'enumerable')) {
-    descriptor.enumerable = object_define_property_x_esm_castBoolean(object.enumerable);
+    descriptor.enumerable = to_boolean_x_esm(object.enumerable);
   }
 
   if (has_own_property_x_esm(object, 'configurable')) {
-    descriptor.configurable = object_define_property_x_esm_castBoolean(object.configurable);
+    descriptor.configurable = to_boolean_x_esm(object.configurable);
   }
 
   if (has_own_property_x_esm(object, 'value')) {
@@ -1333,7 +1333,7 @@ var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
   }
 
   if (has_own_property_x_esm(object, 'writable')) {
-    descriptor.writable = object_define_property_x_esm_castBoolean(object.writable);
+    descriptor.writable = to_boolean_x_esm(object.writable);
   }
 
   if (has_own_property_x_esm(object, 'get')) {
@@ -1394,7 +1394,7 @@ if (nativeDefProp) {
 
   var doc = typeof document !== 'undefined' && document;
 
-  if (testWorksWith({}) && (object_define_property_x_esm_castBoolean(doc) === false || testWorksWith(doc.createElement('div')))) {
+  if (testWorksWith({}) && (to_boolean_x_esm(doc) === false || testWorksWith(doc.createElement('div')))) {
     $defineProperty = function defineProperty(object, property, descriptor) {
       return nativeDefProp(assert_is_object_x_esm(object), to_property_key_x_esm(property), toPropertyDescriptor(descriptor));
     };
@@ -1403,7 +1403,7 @@ if (nativeDefProp) {
   }
 }
 
-if (object_define_property_x_esm_castBoolean(nativeDefProp) === false || definePropertyFallback) {
+if (to_boolean_x_esm(nativeDefProp) === false || definePropertyFallback) {
   var prototypeOfObject = ObjectCtr.prototype; // If JS engine supports accessors creating shortcuts.
 
   var supportsAccessors = has_own_property_x_esm(prototypeOfObject, '__defineGetter__');
