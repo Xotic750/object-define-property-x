@@ -4,10 +4,10 @@ import toPropertyKey from 'to-property-key-x';
 import has from 'has-own-property-x';
 import isFunction from 'is-function-x';
 import assertIsObject from 'assert-is-object-x';
-/** @type {BooleanConstructor} */
-
+var ObjectCtr = {}.constructor;
 var castBoolean = true.constructor;
-var nativeDefProp = typeof Object.defineProperty === 'function' && Object.defineProperty;
+var nd = ObjectCtr.defineProperty;
+var nativeDefProp = typeof nd === 'function' && nd;
 var definePropertyFallback;
 
 var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
@@ -98,27 +98,21 @@ if (nativeDefProp) {
 }
 
 if (castBoolean(nativeDefProp) === false || definePropertyFallback) {
-  var prototypeOfObject = Object.prototype; // If JS engine supports accessors creating shortcuts.
+  var prototypeOfObject = ObjectCtr.prototype; // If JS engine supports accessors creating shortcuts.
 
-  var defineGetter;
-  var defineSetter;
-  var lookupGetter;
-  var lookupSetter;
   var supportsAccessors = has(prototypeOfObject, '__defineGetter__');
+  /* eslint-disable-next-line no-underscore-dangle */
 
-  if (supportsAccessors) {
-    /* eslint-disable-next-line no-underscore-dangle,no-restricted-properties */
-    defineGetter = prototypeOfObject.__defineGetter__;
-    /* eslint-disable-next-line no-underscore-dangle,no-restricted-properties */
+  var defineGetter = supportsAccessors && prototypeOfObject.__defineGetter_;
+  /* eslint-disable-next-line no-underscore-dangle,no-restricted-properties */
 
-    defineSetter = prototypeOfObject.__defineSetter__;
-    /* eslint-disable-next-line no-underscore-dangle */
+  var defineSetter = supportsAccessors && prototypeOfObject.__defineSetter__;
+  /* eslint-disable-next-line no-underscore-dangle */
 
-    lookupGetter = prototypeOfObject.__lookupGetter__;
-    /* eslint-disable-next-line no-underscore-dangle */
+  var lookupGetter = supportsAccessors && prototypeOfObject.__lookupGetter__;
+  /* eslint-disable-next-line no-underscore-dangle */
 
-    lookupSetter = prototypeOfObject.__lookupSetter__;
-  }
+  var lookupSetter = supportsAccessors && prototypeOfObject.__lookupSetter__;
 
   $defineProperty = function defineProperty(object, property, descriptor) {
     assertIsObject(object);
@@ -126,7 +120,7 @@ if (castBoolean(nativeDefProp) === false || definePropertyFallback) {
     var propDesc = toPropertyDescriptor(descriptor); // make a valiant attempt to use the real defineProperty for IE8's DOM elements.
 
     if (definePropertyFallback) {
-      var result = attempt.call(Object, definePropertyFallback, object, propKey, propDesc);
+      var result = attempt.call(ObjectCtr, definePropertyFallback, object, propKey, propDesc);
 
       if (result.threw === false) {
         return result.value;

@@ -2,13 +2,13 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-07-27T08:48:44.524Z",
+  "date": "2019-07-27T14:35:12.270Z",
   "describe": "",
   "description": "Sham for Object.defineProperty",
   "file": "object-define-property-x.js",
-  "hash": "a832d4533130e29970f8",
+  "hash": "7c257aac049eb59db650",
   "license": "MIT",
-  "version": "5.0.15"
+  "version": "5.0.16"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -1310,10 +1310,10 @@ var assert_is_object_x_esm_assertIsObject = function assertIsObject(value) {
 
 
 
-/** @type {BooleanConstructor} */
-
+var ObjectCtr = {}.constructor;
 var object_define_property_x_esm_castBoolean = true.constructor;
-var nativeDefProp = typeof Object.defineProperty === 'function' && Object.defineProperty;
+var nd = ObjectCtr.defineProperty;
+var nativeDefProp = typeof nd === 'function' && nd;
 var definePropertyFallback;
 
 var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
@@ -1404,27 +1404,21 @@ if (nativeDefProp) {
 }
 
 if (object_define_property_x_esm_castBoolean(nativeDefProp) === false || definePropertyFallback) {
-  var prototypeOfObject = Object.prototype; // If JS engine supports accessors creating shortcuts.
+  var prototypeOfObject = ObjectCtr.prototype; // If JS engine supports accessors creating shortcuts.
 
-  var defineGetter;
-  var defineSetter;
-  var lookupGetter;
-  var lookupSetter;
   var supportsAccessors = has_own_property_x_esm(prototypeOfObject, '__defineGetter__');
+  /* eslint-disable-next-line no-underscore-dangle */
 
-  if (supportsAccessors) {
-    /* eslint-disable-next-line no-underscore-dangle,no-restricted-properties */
-    defineGetter = prototypeOfObject.__defineGetter__;
-    /* eslint-disable-next-line no-underscore-dangle,no-restricted-properties */
+  var defineGetter = supportsAccessors && prototypeOfObject.__defineGetter_;
+  /* eslint-disable-next-line no-underscore-dangle,no-restricted-properties */
 
-    defineSetter = prototypeOfObject.__defineSetter__;
-    /* eslint-disable-next-line no-underscore-dangle */
+  var defineSetter = supportsAccessors && prototypeOfObject.__defineSetter__;
+  /* eslint-disable-next-line no-underscore-dangle */
 
-    lookupGetter = prototypeOfObject.__lookupGetter__;
-    /* eslint-disable-next-line no-underscore-dangle */
+  var lookupGetter = supportsAccessors && prototypeOfObject.__lookupGetter__;
+  /* eslint-disable-next-line no-underscore-dangle */
 
-    lookupSetter = prototypeOfObject.__lookupSetter__;
-  }
+  var lookupSetter = supportsAccessors && prototypeOfObject.__lookupSetter__;
 
   $defineProperty = function defineProperty(object, property, descriptor) {
     assert_is_object_x_esm(object);
@@ -1432,7 +1426,7 @@ if (object_define_property_x_esm_castBoolean(nativeDefProp) === false || defineP
     var propDesc = toPropertyDescriptor(descriptor); // make a valiant attempt to use the real defineProperty for IE8's DOM elements.
 
     if (definePropertyFallback) {
-      var result = attempt_x_esm.call(Object, definePropertyFallback, object, propKey, propDesc);
+      var result = attempt_x_esm.call(ObjectCtr, definePropertyFallback, object, propKey, propDesc);
 
       if (result.threw === false) {
         return result.value;
