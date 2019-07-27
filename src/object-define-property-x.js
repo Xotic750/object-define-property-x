@@ -11,7 +11,7 @@ const nd = ObjectCtr.defineProperty;
 const nativeDefProp = typeof nd === 'function' && nd;
 let definePropertyFallback;
 
-const toPropertyDescriptor = function _toPropertyDescriptor(desc) {
+const toPropertyDescriptor = function toPropertyDescriptor(desc) {
   const object = toObject(desc);
   const descriptor = {};
 
@@ -84,7 +84,7 @@ let $defineProperty;
 
 // check whether defineProperty works if it's given. Otherwise, shim partially.
 if (nativeDefProp) {
-  const testWorksWith = function _testWorksWith(object) {
+  const testWorksWith = function testWorksWith(object) {
     const testResult = attempt(nativeDefProp, object, 'sentinel', {});
 
     return testResult.threw === false && testResult.value === object && 'sentinel' in object;

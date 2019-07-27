@@ -2,11 +2,11 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-07-27T19:03:36.531Z",
+  "date": "2019-07-27T21:46:17.647Z",
   "describe": "",
   "description": "Sham for Object.defineProperty",
   "file": "object-define-property-x.js",
-  "hash": "e808397557d7a7dec39d",
+  "hash": "1584f12ec861b828baf9",
   "license": "MIT",
   "version": "5.0.16"
 }
@@ -1316,7 +1316,7 @@ var nd = ObjectCtr.defineProperty;
 var nativeDefProp = typeof nd === 'function' && nd;
 var definePropertyFallback;
 
-var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
+var object_define_property_x_esm_toPropertyDescriptor = function toPropertyDescriptor(desc) {
   var object = to_object_x_esm(desc);
   var descriptor = {};
 
@@ -1387,16 +1387,16 @@ var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
 var $defineProperty; // check whether defineProperty works if it's given. Otherwise, shim partially.
 
 if (nativeDefProp) {
-  var testWorksWith = function _testWorksWith(object) {
+  var object_define_property_x_esm_testWorksWith = function testWorksWith(object) {
     var testResult = attempt_x_esm(nativeDefProp, object, 'sentinel', {});
     return testResult.threw === false && testResult.value === object && 'sentinel' in object;
   };
 
   var doc = typeof document !== 'undefined' && document;
 
-  if (testWorksWith({}) && (to_boolean_x_esm(doc) === false || testWorksWith(doc.createElement('div')))) {
+  if (object_define_property_x_esm_testWorksWith({}) && (to_boolean_x_esm(doc) === false || object_define_property_x_esm_testWorksWith(doc.createElement('div')))) {
     $defineProperty = function defineProperty(object, property, descriptor) {
-      return nativeDefProp(assert_is_object_x_esm(object), to_property_key_x_esm(property), toPropertyDescriptor(descriptor));
+      return nativeDefProp(assert_is_object_x_esm(object), to_property_key_x_esm(property), object_define_property_x_esm_toPropertyDescriptor(descriptor));
     };
   } else {
     definePropertyFallback = nativeDefProp;
@@ -1423,7 +1423,7 @@ if (to_boolean_x_esm(nativeDefProp) === false || definePropertyFallback) {
   $defineProperty = function defineProperty(object, property, descriptor) {
     assert_is_object_x_esm(object);
     var propKey = to_property_key_x_esm(property);
-    var propDesc = toPropertyDescriptor(descriptor); // make a valiant attempt to use the real defineProperty for IE8's DOM elements.
+    var propDesc = object_define_property_x_esm_toPropertyDescriptor(descriptor); // make a valiant attempt to use the real defineProperty for IE8's DOM elements.
 
     if (definePropertyFallback) {
       var result = attempt_x_esm.call(ObjectCtr, definePropertyFallback, object, propKey, propDesc);

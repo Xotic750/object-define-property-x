@@ -10,7 +10,7 @@ var nd = ObjectCtr.defineProperty;
 var nativeDefProp = typeof nd === 'function' && nd;
 var definePropertyFallback;
 
-var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
+var toPropertyDescriptor = function toPropertyDescriptor(desc) {
   var object = toObject(desc);
   var descriptor = {};
 
@@ -81,7 +81,7 @@ var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
 var $defineProperty; // check whether defineProperty works if it's given. Otherwise, shim partially.
 
 if (nativeDefProp) {
-  var testWorksWith = function _testWorksWith(object) {
+  var testWorksWith = function testWorksWith(object) {
     var testResult = attempt(nativeDefProp, object, 'sentinel', {});
     return testResult.threw === false && testResult.value === object && 'sentinel' in object;
   };
