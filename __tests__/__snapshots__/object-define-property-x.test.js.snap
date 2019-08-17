@@ -1,15 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`defineProperty should throw error for non object 1`] = `"42 is not an object"`;
+exports[`defineProperty 0 should throw error for non object 1`] = `"42 is not an object"`;
 
-exports[`defineProperty should throw error if getter and value defined 1`] = `"Invalid property descriptor. Cannot both specify accessors and a value or writable attribute"`;
+exports[`defineProperty 0 should throw error if getter and value defined 1`] = `"Invalid property descriptor. Cannot both specify accessors and a value or writable attribute"`;
 
-exports[`defineProperty should throw error if getter and writeable is truthy 1`] = `"Invalid property descriptor. Cannot both specify accessors and a value or writable attribute"`;
+exports[`defineProperty 0 should throw error if getter and writeable is truthy 1`] = `"Invalid property descriptor. Cannot both specify accessors and a value or writable attribute"`;
 
-exports[`defineProperty should throw error if getter is not a function 1`] = `"getter must be a function"`;
+exports[`defineProperty 0 should throw error if getter is not a function 1`] = `"getter must be a function"`;
 
-exports[`defineProperty should throw error if setter and value defined 1`] = `"Invalid property descriptor. Cannot both specify accessors and a value or writable attribute"`;
+exports[`defineProperty 0 should throw error if setter and value defined 1`] = `"Invalid property descriptor. Cannot both specify accessors and a value or writable attribute"`;
 
-exports[`defineProperty should throw error if setter and writeable is truthy 1`] = `"Invalid property descriptor. Cannot both specify accessors and a value or writable attribute"`;
+exports[`defineProperty 0 should throw error if setter and writeable is truthy 1`] = `"Invalid property descriptor. Cannot both specify accessors and a value or writable attribute"`;
 
-exports[`defineProperty should throw error if setter is not a function 1`] = `"setter must be a function"`;
+exports[`defineProperty 0 should throw error if setter is not a function 1`] = `"setter must be a function"`;
+
+exports[`defineProperty 1 should throw error for non object 1`] = `"42 is not an object"`;
+
+exports[`defineProperty 1 should throw error if getter and value defined 1`] = `"Invalid property descriptor. Cannot both specify accessors and a value or writable attribute"`;
+
+exports[`defineProperty 1 should throw error if getter and writeable is truthy 1`] = `"Invalid property descriptor. Cannot both specify accessors and a value or writable attribute"`;
+
+exports[`defineProperty 1 should throw error if getter is not a function 1`] = `"getter must be a function"`;
+
+exports[`defineProperty 1 should throw error if setter and value defined 1`] = `"Invalid property descriptor. Cannot both specify accessors and a value or writable attribute"`;
+
+exports[`defineProperty 1 should throw error if setter and writeable is truthy 1`] = `"Invalid property descriptor. Cannot both specify accessors and a value or writable attribute"`;
+
+exports[`defineProperty 1 should throw error if setter is not a function 1`] = `"setter must be a function"`;
